@@ -16,8 +16,13 @@ jobs:
       - name: Say Hello
         run: echo "Hello, GitHub Actions is running 🚀"
 
-      - name: Update Packages
-        run: sudo apt update
-
-      - name: List Dirs
-        run: ls -ltr
+      - name: Show System Info
+        run: |
+          echo -e "\n--- OS ---"
+          hostnamectl
+          echo -e "\n--- CPU ---"
+          lscpu | head -n 10
+          echo -e "\n--- RAM ---"
+          free -h
+          echo -e "\n--- DISK ---"
+          df -h
