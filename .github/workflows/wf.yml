@@ -15,7 +15,9 @@ jobs:
 
       - name: Say Hello
         run: echo "Hello, GitHub Actions is running 🚀"
+
       - name: Update Packages
-        run: apt update
+        run: sudo apt update
+
       - name: List Dirs
-	run: ls -ltr
+        run: ls -ltr
