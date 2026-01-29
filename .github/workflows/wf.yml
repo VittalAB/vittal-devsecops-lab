@@ -1,4 +1,4 @@
-name: Build
+name: Build & Scan
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +15,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      # -------------------------
+      # SonarQube Scan
+      # -------------------------
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v2
         env:
@@ -27,3 +29,21 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # -------------------------
+      # Docker Build
+      # -------------------------
+      - name: Build Docker Image
+        run: |
+          docker build -t flask-demo:latest .
+
+      # -------------------------
+      # Trivy Scan
+      # -------------------------
+      - name: Trivy Vulnerability Scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: flask-demo:latest
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
