@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 llm = init_chat_model(
     "azure_openai:gpt-5-2025-08-07",
     api_key="",
@@ -63,4 +64,5 @@ question = "hi hello namaskar heng ide maiyge?"
 for step in agent.stream(
     {"messages": [{"role": "user", "content": question}]}, stream_mode="values",
 ):
+
     print(step["messages"][-1].pretty_print())
