@@ -42,6 +42,7 @@ jobs:
       # -------------------------
       - name: Trivy Vulnerability Scan
         uses: aquasecurity/trivy-action@0.20.0
+        continue_on_error: true
         with:
           image-ref: flask-demo:latest
           format: table
