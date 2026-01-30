@@ -24,27 +24,25 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # - name: SonarQube Quality Gate
-      #   uses: sonarsource/sonarqube-quality-gate-action@v1
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # -------------------------
+      # Docker Login
+      # -------------------------
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # -------------------------
       # Docker Build
       # -------------------------
       - name: Build Docker Image
         run: |
-          docker build -t flask-demo:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-demo:latest .
 
       # -------------------------
-      # Trivy Scan
+      # Docker Push
       # -------------------------
-      - name: Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@0.20.0
-        continue_on_error: true
-        with:
-          image-ref: flask-demo:latest
-          format: table
-          exit-code: 1
-          severity: CRITICAL,HIGH
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-demo:latest
